@@ -17,7 +17,7 @@ tags:
 &ensp; &ensp; 前往[remarkable](https://remarkableapp.github.io/linux/download.html)下载安装文件或([点此下载](https://remarkableapp.github.io/files/remarkable_1.87_all.deb))，Ubuntu系统选择*.deb格式:
 
  
- ![DownLoad Remarkable](/home/sun/blog/source/_posts/ubuntu-markdowndownload.png)
+ ![DownLoad Remarkable](ubuntu-markdown/download.png)
 
 --- 
  
