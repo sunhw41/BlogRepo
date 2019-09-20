@@ -7,7 +7,7 @@
 
 
 
-<title>Linux内核的编译方法 | 孙宏伟的个人网站.</title>
+<title>Ubuntu内核的安装、删除与切换 | 孙宏伟的个人网站.</title>
 
 
 
@@ -170,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Linux内核的编译方法</h1>
+            <h1 class="post-title">Ubuntu内核的安装、删除与切换</h1>
             
                 <div class="post-meta">
                     
@@ -179,7 +179,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">May 10, 2017&nbsp;&nbsp;10:14:48</a>
+                        Date: <a href="#">August 3, 2017&nbsp;&nbsp;8:04:56</a>
                         </span>
                     
                     
@@ -195,79 +195,36 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Linux-版本号命名规则"><a href="#Linux-版本号命名规则" class="headerlink" title="Linux 版本号命名规则"></a>Linux 版本号命名规则</h2><p>&ensp;&ensp;&ensp;&ensp;这里先对linux的内核版本号做个解释，以“4.8.0-36-generic”为例：</p>
-<table>
-   <tr>
-      <td>4</td>
-      <td>8</td>
-      <td>0</td>
-      <td>36</td>
-      <td colspan="2">generic</td>   
-   </tr>
-   <tr>
-      <td>主版本号</td>
-      <td>奇数为开发版</td>
-      <td>修订版本号</td>
-      <td>第几次微调</td>
-      <td>generic</td>
-      <td>通用</td>
-   </tr>
-   <tr>
-      <td></td>
-      <td>偶数为稳定版</td>
-      <td></td>
-      <td></td>
-      <td>preemption</td>
-      <td>抢占式</td>
-   </tr>
-   <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>preemption</td>
-      <td>低延时</td>
-   </tr>
-   <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>rt/realtime</td>
-      <td>实时</td>
-   </tr>
-</table>
+            <h2 id="查看当前内核"><a href="#查看当前内核" class="headerlink" title="查看当前内核"></a>查看当前内核</h2><p>&ensp; &ensp;&ensp; &ensp; 可以通过以下命令查看当前安装了几个linux内核：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dpkg</span> --get-selections | grep linux-image</span><br></pre></td></tr></table></figure>
 
-<p><strong>对于该用哪种类型,官网上的解释如下:</strong></p>
-<ul>
-<li>If you do not require low latency for your system then please use the -generic kernel.</li>
-<li>If you need a low latency system (e.g. for recording audio) then please use the -preempt kernel as a fist choice. This reduces latency but doesn’t sacrifice power saving features. It is available only for 64 bit systems (also called amd64).</li>
-<li>If the -preempt kernel does not provide enough low latency for your needs (or you have an 32 bit system) then you should try the -lowlatency kernel.</li>
-<li>If the -lowlatency kernel isn’t enough then you should try the -rt kernel</li>
-<li>If the -rt kernel isn’t enough stable for you then you should try the -realtime kernel</li>
-</ul>
-<h2 id="Linux-内核编译"><a href="#Linux-内核编译" class="headerlink" title="Linux 内核编译"></a>Linux 内核编译</h2><p>&ensp;&ensp;&ensp;&ensp; 前往<a href="https://mirrors.edge.kernel.org/pub/linux/kernel/" target="_blank" rel="noopener">Linux内核</a> 选择所需要的版本:<br><img src="/2017/05/10/Linux-kernel-compile/downlink.png" alt="DownLoadLink"></p>
-<p>&ensp;&ensp;&ensp;&ensp; 下载到本地执行下述命令解压,进入到解压后的文件夹:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$tar</span> -xvf linux-3.18.129.tar.xz linux-33.18.129</span><br><span class="line"><span class="variable">$cd</span> linux-33.18.129</span><br></pre></td></tr></table></figure>
+<p><img src="/2017/08/03/Linux-Kernel-Config/grepKernel.png" alt="grepKernel"> </p>
+<p>&ensp; &ensp;&ensp; &ensp; 当有多个内核时，使用如下命令查看当前使用的是哪个版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$uname</span> -a</span><br></pre></td></tr></table></figure>
 
-<p>&ensp;&ensp;&ensp;&ensp;执行内核配置时需要依赖到curses的库，用于以图形化选择配置方案,执行如下命令安装:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt-get install libncurses5-dev</span><br></pre></td></tr></table></figure>
+<p><img src="/2017/08/03/Linux-Kernel-Config/uname.png" alt="uname"> </p>
+<h2 id="配置启动顺序"><a href="#配置启动顺序" class="headerlink" title="配置启动顺序"></a>配置启动顺序</h2><p>&ensp; &ensp;&ensp; &ensp; 如果当前使用的内核为自己所需要的，无需做任何改动，如果电脑中有需要的内核，但是当前使用的不是，可以使用如下命令进行修改，首先查询需求内核的顺序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$grep</span> menuentry /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
 
-<p>&ensp;&ensp;&ensp;&ensp;对内核进行裁剪，执行如下命令进入到图形化配置界面，直接选择需要的项目进行更改，具体内容请查阅内核配置的详细文章,此处不做过多介绍:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$make</span> menuconfig</span><br></pre></td></tr></table></figure>
+<p><img src="/2017/08/03/Linux-Kernel-Config/menuentry.png" alt="menuentry"><br>&ensp; &ensp;&ensp; &ensp; 在输出的结果中找到这样的行：</p>
+<p><em style="color:orange">menuentry ‘Ubuntu, with Linux 4.8.0-36-generic’ –class ubuntu………</em></p>
+<p>&ensp; &ensp;&ensp; &ensp; 从0开始计算，找到自己所需要内核的顺序，假设在第4行，则序列为3(从0开始)，然后修改这个文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> vim /etc/default/grub</span><br></pre></td></tr></table></figure>
 
-<p>&ensp;&ensp;&ensp;&ensp;根据自己的需求进行相应的配置，完成后会保存为.config到该目录，当然也可以拷贝已有的文件，不用再进行配置。<br><img src="/2017/05/10/Linux-kernel-compile/menuconfig.png" alt="MenuConfig"></p>
-<p>&ensp;&ensp;&ensp;&ensp;执行编译命令，开始编译，如果是多cpu，可以后接 -j(n)，这样编译能快些，不然只会一个一个的编译:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$make</span> -j4</span><br></pre></td></tr></table></figure>
+<p>&ensp; &ensp;&ensp; &ensp; 找到<em style="color:red">“GRUB_DEFAULT=0”</em>这行，修改为<em style="color:red">“GRUB_DEFAULT=“1&gt;3”</em><br>或 <em style="color:red"> “GRUB_DEFAULT=”Ubuntu, with Linux 4.8.0-36-generic”(不推荐)</em>，然后保存：</p>
+<p>&ensp; &ensp;&ensp; &ensp; 执行如下命令更新grub，然后重启，用uname查看当前的内核版本是否已经变更：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> update-grub</span><br></pre></td></tr></table></figure>
 
-<p>&ensp;&ensp;&ensp;&ensp;编译完成后，执行如下命令安装内核modules:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> make modules_install</span><br></pre></td></tr></table></figure>
+<p>&ensp; &ensp;&ensp; &ensp; 上述步骤对应的是系统启动是的GNU Grub的顺序，如果上述操作没生效，可以重启时按住Esc键，然后查看Ubuntu Advance的位置，进入后再查看所需要的内核的序号，然后更改按照下述方式更改：<br><em style="color:red">GRUB_DEFAULT=“2&gt;3”</em><br>(从上向下数，从0开始，假设Ubuntu Advance位置为2,所需内核位置为3)</p>
+<h2 id="安装指定内核"><a href="#安装指定内核" class="headerlink" title="安装指定内核"></a>安装指定内核</h2><p>&ensp; &ensp;&ensp; &ensp; 如果通过dpkg –get-selections 命令输出的内容没有所需要的内核，则需要新装，假设需要的内核版本为4.8.0-36，使用如下命令进行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt-get install linux-image-4.8.0-36-generic </span><br><span class="line"><span class="variable">$sudo</span> apt-get install linux-image-extra-4.8.0-36-generic</span><br></pre></td></tr></table></figure>
 
-<p>&ensp;&ensp;&ensp;&ensp;执行完毕后可以到/lib/modules下查看是否新增了对应的文件夹:<br><img src="/2017/05/10/Linux-kernel-compile/libmodules.png" alt="libmodule"><br>&ensp;&ensp;&ensp;&ensp;然后再执行如下命令安装内核:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> make install</span><br></pre></td></tr></table></figure>
+<p>&ensp; &ensp;&ensp; &ensp; 内核成功安装后，再执行上述的命令讲自己的内核修改为默认启动即可</p>
+<p>&ensp; &ensp;&ensp; &ensp; 当然也可以前往<a href="https://mirrors.edge.kernel.org/pub/linux/kernel/" target="_blank" rel="noopener">LinuxKernel</a> 下载合适的内核版本，本地编译安装，此处不做过多描述。</p>
+<p>&ensp; &ensp;&ensp; &ensp; 如果由于安装时的设置，导致系统内核过多，占用/boot的空间，因此需要删除不必要的内核，执行以下命令删除即可    </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt-get purge linux-image-4.8.0-36-generic</span><br></pre></td></tr></table></figure>
 
-<p>&ensp;&ensp;&ensp;&ensp;执行完毕后到/boot文件夹下查看是否新增相关文件:<br><img src="/2017/05/10/Linux-kernel-compile/boot.png" alt="libmodule"></p>
-<h2 id="使用新内核"><a href="#使用新内核" class="headerlink" title="使用新内核"></a>使用新内核</h2><p>&ensp;&ensp;&ensp;&ensp;安装完成后，重启机器。在重启的过程中，使用TAB+shift组合键或者ESC进入grub引导界面，不同的机器进入的方式可能会略有差异,以Ubuntu为例,启动时进入到grub,可以看到已经多出了本次编译的内核:<br><img src="/2017/05/10/Linux-kernel-compile/grub.png" alt="grub"><br>&ensp;&ensp;&ensp;&ensp;进入系统后再查看内核版本,已经变更为新编译的3.18.129:<br><img src="/2017/05/10/Linux-kernel-compile/kernelversion.png" alt="kernelversion"></p>
+<p>&ensp; &ensp;&ensp; &ensp; 使用remove也可以，但是不会删除配置文件，purge会删除相关的配置文件，避免留下冗余的内容，当尝试新内核时，由于新内核存在很多不稳定性，因此建议保留1～2个稳定的内核，以免意外。</p>
 
         </div>
 
@@ -306,10 +263,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2017/08/03/Linux-Kernel-Config/">Ubuntu内核的安装、删除与切换</a>
+                <a class="prev" rel="prev" href="/2018/06/21/union-struct/">结构体包含联合体与数组的复制</a>
             
             
-            <a class="next" rel="next" href="/2016/08/03/mac-androidstudio/">OSX下解决Gradle同步失败的问题</a>
+            <a class="next" rel="next" href="/2017/05/10/Linux-kernel-compile/">Linux内核的编译方法</a>
             
         </section>
 
