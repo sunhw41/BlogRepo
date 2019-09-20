@@ -1,5 +1,4 @@
 ---
-layout:     post
 title:      结构体包含联合体与数组的复制
 date:       2018-06-21 15:31:19
 author:     孙宏伟

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>Linux内核的编译方法 | 孙宏伟的个人网站.</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">宏伟的Blog.</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">宏伟的Blog.</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">前往底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "全部折叠"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开全部"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Linux内核的编译方法</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">孙宏伟</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 10, 2017&nbsp;&nbsp;10:14:48</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Linux/">Linux</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Linux-版本号命名规则"><a href="#Linux-版本号命名规则" class="headerlink" title="Linux 版本号命名规则"></a>Linux 版本号命名规则</h2><p>&ensp;&ensp;&ensp;&ensp;这里先对linux的内核版本号做个解释，以“4.8.0-36-generic”为例：</p>
+<table>
+   <tr>
+      <td>4</td>
+      <td>8</td>
+      <td>0</td>
+      <td>36</td>
+      <td colspan="2">generic</td>   
+   </tr>
+   <tr>
+      <td>主版本号</td>
+      <td>奇数为开发版</td>
+      <td>修订版本号</td>
+      <td>第几次微调</td>
+      <td>generic</td>
+      <td>通用</td>
+   </tr>
+   <tr>
+      <td></td>
+      <td>偶数为稳定版</td>
+      <td></td>
+      <td></td>
+      <td>preemption</td>
+      <td>抢占式</td>
+   </tr>
+   <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>preemption</td>
+      <td>低延时</td>
+   </tr>
+   <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>rt/realtime</td>
+      <td>实时</td>
+   </tr>
+</table>
+
+<p><strong>对于该用哪种类型,官网上的解释如下:</strong></p>
+<ul>
+<li>If you do not require low latency for your system then please use the -generic kernel.</li>
+<li>If you need a low latency system (e.g. for recording audio) then please use the -preempt kernel as a fist choice. This reduces latency but doesn’t sacrifice power saving features. It is available only for 64 bit systems (also called amd64).</li>
+<li>If the -preempt kernel does not provide enough low latency for your needs (or you have an 32 bit system) then you should try the -lowlatency kernel.</li>
+<li>If the -lowlatency kernel isn’t enough then you should try the -rt kernel</li>
+<li>If the -rt kernel isn’t enough stable for you then you should try the -realtime kernel</li>
+</ul>
+<h2 id="Linux-内核编译"><a href="#Linux-内核编译" class="headerlink" title="Linux 内核编译"></a>Linux 内核编译</h2><p>&ensp;&ensp;&ensp;&ensp; 前往<a href="https://mirrors.edge.kernel.org/pub/linux/kernel/" target="_blank" rel="noopener">Linux内核</a> 选择所需要的版本:<br><img src="/2017/05/10/Linux-kernel-compile/downlink.png" alt="DownLoadLink"></p>
+<p>&ensp;&ensp;&ensp;&ensp; 下载到本地执行下述命令解压,进入到解压后的文件夹:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$tar</span> -xvf linux-3.18.129.tar.xz linux-33.18.129</span><br><span class="line"><span class="variable">$cd</span> linux-33.18.129</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;执行内核配置时需要依赖到curses的库，用于以图形化选择配置方案,执行如下命令安装:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt-get install libncurses5-dev</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;对内核进行裁剪，执行如下命令进入到图形化配置界面，直接选择需要的项目进行更改，具体内容请查阅内核配置的详细文章,此处不做过多介绍:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$make</span> menuconfig</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;根据自己的需求进行相应的配置，完成后会保存为.config到该目录，当然也可以拷贝已有的文件，不用再进行配置。<br><img src="/2017/05/10/Linux-kernel-compile/menuconfig.png" alt="MenuConfig"></p>
+<p>&ensp;&ensp;&ensp;&ensp;执行编译命令，开始编译，如果是多cpu，可以后接 -j(n)，这样编译能快些，不然只会一个一个的编译:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$make</span> -j4</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;编译完成后，执行如下命令安装内核modules:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> make modules_install</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;执行完毕后可以到/lib/modules下查看是否新增了对应的文件夹:<br><img src="/2017/05/10/Linux-kernel-compile/libmodules.png" alt="libmodule"><br>&ensp;&ensp;&ensp;&ensp;然后再执行如下命令安装内核:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> make install</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;执行完毕后到/boot文件夹下查看是否新增相关文件:<br><img src="/2017/05/10/Linux-kernel-compile/boot.png" alt="libmodule"></p>
+<h2 id="使用新内核"><a href="#使用新内核" class="headerlink" title="使用新内核"></a>使用新内核</h2><p>&ensp;&ensp;&ensp;&ensp;安装完成后，重启机器。在重启的过程中，使用TAB+shift组合键或者ESC进入grub引导界面，不同的机器进入的方式可能会略有差异,以Ubuntu为例,启动时进入到grub,可以看到已经多出了本次编译的内核:<br><img src="/2017/05/10/Linux-kernel-compile/grub.png" alt="grub"><br>&ensp;&ensp;&ensp;&ensp;进入系统后再查看内核版本,已经变更为新编译的3.18.129:<br><img src="/2017/05/10/Linux-kernel-compile/kernelversion.png" alt="kernelversion"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>孙宏伟</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Linux/"># Linux</a>
+                    
+                        <a href="/tags/Kernel/"># Kernel</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/06/21/union-struct/">结构体包含联合体与数组的复制</a>
+            
+            
+            <a class="next" rel="next" href="/2016/08/03/mac-androidstudio/">OSX下解决Gradle同步失败的问题</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 孙宏伟 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
