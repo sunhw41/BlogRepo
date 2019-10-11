@@ -1,11 +1,10 @@
 ---
 title:        Ubuntu内核的安装、删除与切换
-date:       2017-08-03 08:04:56
+date:       2019-08-03 08:04:56
 author:     孙宏伟
 categories: Linux
 tags:
  - Linux
- - Kernel
 ---
 
 ## 查看当前内核

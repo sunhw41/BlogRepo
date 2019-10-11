@@ -1,14 +1,11 @@
 ---
 title:          Ubuntu下Markdown编辑器的安装
-date:         2015-09-28 08:02:19
+date:         2016-09-28 08:02:19
 author:     孙宏伟
 summary:    markdown Ubuntu 
-categories: Remarkable
-thumbnail:  Ubuntu
+categories: Ubuntu
 tags:
  - Ubuntu
- - markdown
- - remarkable
 ---
 
 

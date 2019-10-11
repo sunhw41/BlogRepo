@@ -1,12 +1,11 @@
 ---
 title:        OSX下解决Gradle同步失败的问题
-date:       2016-08-03 08:04:56
+date:       2018-08-03 08:04:56
 author:     孙宏伟
 categories: Android
 tags:
  - OSX
  - Android Studio
- - Gradle
 ---
 
 

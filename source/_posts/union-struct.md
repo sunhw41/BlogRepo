@@ -5,8 +5,7 @@ author:     孙宏伟
 summary:    union and struct
 categories: C/C++
 tags:
- - union
- - struct
+ - DataStruct
 ---
 
 ## 位域结构体

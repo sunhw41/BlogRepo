@@ -1,13 +1,11 @@
 ---
 title: Linux内核的编译方法
-date: 2017-05-10 10:14:48
+date: 2019-07-10 10:14:48
 author:     孙宏伟
 summary:    Linux compile guide
 categories: Linux
 tags:
  - Linux 
- - Kernel
-
 ---
 
 ## Linux 版本号命名规则
