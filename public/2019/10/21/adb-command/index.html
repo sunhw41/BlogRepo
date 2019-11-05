@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>ADB常用调试命令 | 孙宏伟的个人网站.</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">宏伟的Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">宏伟的Blog</a><a id="mobile-toggle-theme">·&nbsp;日间模式</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">前往底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "全部折叠"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开全部"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">ADB常用调试命令</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">孙宏伟</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 21, 2019&nbsp;&nbsp;15:31:19</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Android/">Android</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Android设备连接相关指令"><a href="#Android设备连接相关指令" class="headerlink" title="Android设备连接相关指令"></a>Android设备连接相关指令</h2><h3 id="无线调试连接"><a href="#无线调试连接" class="headerlink" title="无线调试连接"></a>无线调试连接</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span>  connect ip:port</span><br></pre></td></tr></table></figure>
+
+<h3 id="与设备断开连接"><a href="#与设备断开连接" class="headerlink" title="与设备断开连接"></a>与设备断开连接</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span>  disconnect</span><br></pre></td></tr></table></figure>
+
+<h3 id="终止adb进程"><a href="#终止adb进程" class="headerlink" title="终止adb进程"></a>终止adb进程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span>  <span class="built_in">kill</span>-server</span><br></pre></td></tr></table></figure>
+
+<h2 id="Android应用调试相关指令"><a href="#Android应用调试相关指令" class="headerlink" title="Android应用调试相关指令"></a>Android应用调试相关指令</h2><h3 id="安装应用"><a href="#安装应用" class="headerlink" title="安装应用"></a>安装应用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span>  install -t -r ***.apk</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除应用"><a href="#删除应用" class="headerlink" title="删除应用"></a>删除应用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span>  uninstall PackangeName</span><br></pre></td></tr></table></figure>
+
+<p>PackangeName为要删除的应用的具体包名;</p>
+<h3 id="查看包名"><a href="#查看包名" class="headerlink" title="查看包名"></a>查看包名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span>  shell pm list packages</span><br></pre></td></tr></table></figure>
+
+<p> 如需删除应用时,不知道具体应用的包名,可以通过该命令将系统内所有应用的包名列出来;</p>
+<h3 id="拉起应用"><a href="#拉起应用" class="headerlink" title="拉起应用"></a>拉起应用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell am start PackageName/.ActivityName</span><br></pre></td></tr></table></figure>
+
+<p>例如当前应用的包名为”com.sun.myapplication”,要拉起的Acitivity,在当前包的目录下,且名称为”MainActivity”,则命令如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell am start com.sun.myapplication/.MainActivity</span><br></pre></td></tr></table></figure>
+
+<h3 id="拉起Service"><a href="#拉起Service" class="headerlink" title="拉起Service"></a>拉起Service</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> -s shell am startservice -a START_XXX_SERVICE</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送广播"><a href="#发送广播" class="headerlink" title="发送广播"></a>发送广播</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell am broadcast -a RECEIVE_BROADCAST</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看当前多少个设备连接"><a href="#查看当前多少个设备连接" class="headerlink" title="查看当前多少个设备连接"></a>查看当前多少个设备连接</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> devices</span><br></pre></td></tr></table></figure>
+
+<h3 id="对指定设备进行操作"><a href="#对指定设备进行操作" class="headerlink" title="对指定设备进行操作"></a>对指定设备进行操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> -s adnroiddevicename XXX XXX</span><br></pre></td></tr></table></figure>
+
+<p>通常我们只连接一个Android设备的话无需此步骤,上述命令均可正常使用. 但是当同时连接多个Android设备时,再直接用上述命令则会发生错误,提示存在不只一个Android设备,需要指定具体哪一个,那就需要在上述命令的基础上,执行此命令,列出所有设备,然后再增加一个 -s 的参数没来指定具体对哪个设备进行操作,例如,一个通过wifi进行adb连接的设备为”10.10.10.123:5555”,则安装应用的命令如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> -s 10.10.123.123 install -t -r ***.apk</span><br></pre></td></tr></table></figure>
+
+<h2 id="Android文件操作"><a href="#Android文件操作" class="headerlink" title="Android文件操作"></a>Android文件操作</h2><h3 id="获取Root权限"><a href="#获取Root权限" class="headerlink" title="获取Root权限"></a>获取Root权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> root</span><br><span class="line"><span class="variable">$adb</span> remount</span><br></pre></td></tr></table></figure>
+
+<p>执行上述命令后,即可在外部重新挂在Android设备,可以通过相关命令对Android系统进行文件的拉取和推送;</p>
+<h3 id="拉取文件"><a href="#拉取文件" class="headerlink" title="拉取文件"></a>拉取文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> pull /***/***/*** .</span><br></pre></td></tr></table></figure>
+
+<p>该命令将系统内某文件夹下的文件拉取到电脑中,例如需要将Android系统内/etc/resolve.conf文件拉取出来进行编辑,则命令如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> pull /etc/resolve.conf  .</span><br></pre></td></tr></table></figure>
+
+<p>同理用上述方法也可以将Android系统内的应用拉取出来.</p>
+<h3 id="推送文件"><a href="#推送文件" class="headerlink" title="推送文件"></a>推送文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> push *** /***/***/***</span><br></pre></td></tr></table></figure>
+
+<p>该命令适用于将电脑内的某文件推送到安卓系统中,例如将某个音乐文件推送到系统内的某个文件夹,则命令如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> push moonlight.mp3 storage/emulated/0/kwmusiccar/</span><br></pre></td></tr></table></figure>
+
+<h2 id="Android-shell"><a href="#Android-shell" class="headerlink" title="Android shell"></a>Android shell</h2><h3 id="命令行交互"><a href="#命令行交互" class="headerlink" title="命令行交互"></a>命令行交互</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell</span><br></pre></td></tr></table></figure>
+
+<p>通过上述命令,可以进入到命令行交互的界面,直接对Android 系统的内容进行查看;</p>
+<h3 id="shell内编辑文件"><a href="#shell内编辑文件" class="headerlink" title="shell内编辑文件"></a>shell内编辑文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$mount</span> -o remount,rw /</span><br></pre></td></tr></table></figure>
+
+<p>当进入到shell界面时,由于文件系统的限制,还不能直接对系统内的文件进行编辑,执行上述指令后,即可直接在shell内对文件进行编辑操作;</p>
+<h2 id="查看Log"><a href="#查看Log" class="headerlink" title="查看Log"></a>查看Log</h2><h3 id="打印全部Log"><a href="#打印全部Log" class="headerlink" title="打印全部Log"></a>打印全部Log</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell logcat</span><br></pre></td></tr></table></figure>
+
+<h3 id="选择性打印Log"><a href="#选择性打印Log" class="headerlink" title="选择性打印Log"></a>选择性打印Log</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell logcat |　grep sunhw</span><br></pre></td></tr></table></figure>
+
+<p>上述命令可以过滤Log中所有包含＂sunhw＂字段的内容；当需要再进一步精确，例如只打印所有通过Log.d打印出来的包含＂sunhw＂字段的Log,执行下述命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$adb</span> shell logcat *:D |　grep sunhw</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>孙宏伟</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/ADB/"># ADB</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/10/Ubuntu-Install/">安装Ubuntu操作系统</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 孙宏伟 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
