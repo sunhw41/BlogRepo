@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>NVMe硬盘上安装Ubuntu | 孙宏伟的个人网站.</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">宏伟的Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">宏伟的Blog</a><a id="mobile-toggle-theme">·&nbsp;日间模式</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">前往底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "全部折叠"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开全部"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">NVMe硬盘上安装Ubuntu</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">孙宏伟</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 8, 2019&nbsp;&nbsp;19:17:20</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Ubuntu/">Ubuntu</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="在NVMe硬盘上安装Ubuntu"><a href="#在NVMe硬盘上安装Ubuntu" class="headerlink" title="在NVMe硬盘上安装Ubuntu"></a>在NVMe硬盘上安装Ubuntu</h2><h3 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h3><p>&ensp;&ensp;&ensp;&ensp;今天在帮同事安装Ubuntu时遇到点困难,整理一下.同事的电脑是Dell inspire 5488,18年生产的.因为开发工具原因我们需要使用Ubuntu16.04(Kernel:4.15.0-29).因为是同事电脑,安装时没拍照,安装好后也不好再折腾一遍,就纯文字描述了.</p>
+<p>&ensp;&ensp;&ensp;&ensp;一开始采用UEFI的方式安装,启动后进入BIOS,发现了两个安装的U盘,随意选一个进入下一步,结果往下进行后提示如下:</p>
+<blockquote>
+<p>安装Ubuntu需要8.3G的控空间,而磁盘只有4G</p>
+</blockquote>
+<p>&ensp;&ensp;&ensp;&ensp;以为是启动时的U盘选差了, 重启再选另外一个,仍然是这个原因,重新给U盘烧写系统仍是上述现象.</p>
+<p>&ensp;&ensp;&ensp;&ensp;后来决定放弃使用UEFI模式启动,使用Legacy方式,虽然可以安装系统,但是启动后提示找不到启动的设备.没法发现电脑的硬盘.</p>
+<hr>
+<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>&ensp;&ensp;&ensp;&ensp;发送上述现象是因为该电脑为固态硬盘,BIOS中硬盘模式开启了Rapid ON的模式,硬盘在Linux系统中不是传统的 /dev/sd* 这样的形式存在的,所以找不到硬盘.</p>
+<hr>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>&ensp;&ensp;&ensp;&ensp;将BIOS的启动参数进行如下设置:</p>
+<blockquote>
+<ol>
+<li>采用Legacy方式启动;</li>
+<li>将硬盘模式更改为ACHI;</li>
+<li>将UEFI Boot Security 更改为Off;</li>
+</ol>
+</blockquote>
+<p>&ensp;&ensp;&ensp;&ensp;然后重启进入BIOS界面,会有Legacy启动选项和UEFI启动选项,选择UEFI选项下的U盘作为启动介质,此时会提示在非UEFI模式下选择采用UEFI模式安装,同意该方式,继续下一步,直至安装结束.</p>
+<p>&ensp;&ensp;&ensp;&ensp;重启后进入到BIOS看一下,是否还存在Legacy这个启动选项,如果存在的话则将该方式关闭,并且将UEFI中的Security Boot 更改为Off即可正常使用.</p>
+<hr>
+<h3 id="关于UEFI和Leagacy"><a href="#关于UEFI和Leagacy" class="headerlink" title="关于UEFI和Leagacy"></a>关于UEFI和Leagacy</h3><blockquote>
+<p>UEFI技术较新,只支持64位操作系统,启动速度较快;</p>
+</blockquote>
+<blockquote>
+<p>Legacy是传统的启动模式,不能支持超过2T的硬盘;</p>
+</blockquote>
+<p>&ensp;&ensp;&ensp;&ensp;更多区别和细节就百度一下吧,不细说了.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>孙宏伟</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Ubuntu/"># Ubuntu</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/10/10/Ubuntu-Install/">安装Ubuntu操作系统</a>
+            
+            
+            <a class="next" rel="next" href="/2019/08/03/Linux-Kernel-Config/">Ubuntu内核的安装、删除与切换</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 孙宏伟 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

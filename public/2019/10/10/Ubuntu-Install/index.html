@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>安装Ubuntu操作系统 | 孙宏伟的个人网站.</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">宏伟的Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">宏伟的Blog</a><a id="mobile-toggle-theme">·&nbsp;日间模式</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">前往底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "全部折叠"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开全部"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">安装Ubuntu操作系统</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">孙宏伟</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 10, 2019&nbsp;&nbsp;19:56:23</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Ubuntu/">Ubuntu</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="安装Ubuntu操作系统"><a href="#安装Ubuntu操作系统" class="headerlink" title="安装Ubuntu操作系统"></a>安装Ubuntu操作系统</h2><p>&ensp;&ensp;&ensp;&ensp;一般可以直接将Ubuntu系统安装到磁盘上，或Ubuntu/Windows双系统，或在宿主机(当前电脑运行的系统)上安装虚拟机来运行Ubuntu，本文首先介绍一下虚拟机的安装,然后再讲解如何通过虚拟机引导Ubuntu镜像进行Ubuntu系统的安装,如果打算直接在电脑上安装Ubuntu,可以通过USB制成系统盘,然后<a href="#jump">直接参考本部分</a>进行安装。对于双系统安装,只需在安装时选择选择保留Window,安装Ubuntu的选项即可,其他步骤完全相同,在此不再赘述.</p>
+<h3 id="一、安装虚拟机"><a href="#一、安装虚拟机" class="headerlink" title="一、安装虚拟机"></a>一、安装虚拟机</h3><p>&ensp;&ensp;&ensp;&ensp;1、前往<a href="https://www.virtualbox.org/" target="_blank" rel="noopener">VirtualBox网站</a> 下载安装包，根据宿主机的系统来下载安装程序，默认执行安装：<br><img src="/2019/10/10/Ubuntu-Install/downloadVirtual.png" alt="DownLoadVirtualBox"></p>
+<p>&ensp;&ensp;&ensp;&ensp;安装过程中会安装其他组件，用于网络和usb控制的，此类全部默认安装即可。</p>
+<h3 id="二、创建虚拟机"><a href="#二、创建虚拟机" class="headerlink" title="二、创建虚拟机"></a>二、创建虚拟机</h3><p>&ensp;&ensp;&ensp;&ensp;1、将Ubuntu镜像拷贝到本地，运行VirtualBox，点击“New”新创建一个虚拟机：<br><img src="/2019/10/10/Ubuntu-Install/CreateVirtualBox.png" alt="CreateVirtualBox"></p>
+<p>&ensp;&ensp;&ensp;&ensp;2、在弹出的对话框中输入新建虚拟机的名称，可自定义名称，选择虚拟机创建位置的文件夹，其他配置保持同图中一致，点击“Next”：<br><img src="/2019/10/10/Ubuntu-Install/NameSystem.png" alt="NameSystem"></p>
+<p>&ensp;&ensp;&ensp;&ensp;3、为本虚拟机分配内容，根据电脑实际情况分配，建议不要低于4G，点击“Next”：<br><img src="/2019/10/10/Ubuntu-Install/SetRam.png" alt="SetRam"></p>
+<p>&ensp;&ensp;&ensp;&ensp;4、为虚拟机分配虚拟硬盘文件，如图选择创建一个新的虚拟硬盘，点击“Next”：<br><img src="/2019/10/10/Ubuntu-Install/SetRom.png" alt="SetRom"></p>
+<p>&ensp;&ensp;&ensp;&ensp;5、选择新创建的虚拟硬盘类型，选择VDI，点击“Next”：<br><img src="/2019/10/10/Ubuntu-Install/SetRomType.png" alt="SetRomType"></p>
+<p>&ensp;&ensp;&ensp;&ensp;6、选择硬盘空间分配的模式，这里选择动态分配，硬盘文件的大小随着虚拟系统内文件的增多而增长，不会直接占用太多宿主机的空间，点击“Next”：<br><img src="/2019/10/10/Ubuntu-Install/SetStorage.png" alt="SetStorage"></p>
+<p>&ensp;&ensp;&ensp;&ensp;7、为虚拟硬盘命名，这里我们给硬盘分配100G的大小，该值是虚拟硬盘的最大容量，创建初期并不会一次性占用宿主机的100G空间，然后点击“Create”，完成虚拟机的创建：<br><img src="/2019/10/10/Ubuntu-Install/NameStorage.png" alt="NameStorage"></p>
+<h3 id="三、配置虚拟机"><a href="#三、配置虚拟机" class="headerlink" title="三、配置虚拟机"></a>三、配置虚拟机</h3><p>&ensp;&ensp;&ensp;&ensp;1、创建完成后，在VirtualBox中选择刚刚创建的虚拟机，然后点击“Setting”：<br><img src="/2019/10/10/Ubuntu-Install/SettingSystem.png" alt="SettingSystem"></p>
+<p>&ensp;&ensp;&ensp;&ensp;2、在Setting界面，选择“Storatge”，然后点击“Controller：IDE”下方的光驱图标，再点击最右侧“Attributes”下“Optical Drive”后面的光驱图标，在弹出的对话框中选择”Choose Virtual Optical Disk File”，在新弹出的对话框中选择”ubuntu-16.04.2-desktop-amd64.iso”镜像文件，然后点击OK，至此完成虚拟机的启动镜像配置：<br><img src="/2019/10/10/Ubuntu-Install/SettingDetails.png" alt="SettingDetails"></p>
+<p><span id="jump"> </span> </p>
+<h3 id="四、安装Ubuntu系统"><a href="#四、安装Ubuntu系统" class="headerlink" title="四、安装Ubuntu系统"></a>四、安装Ubuntu系统</h3><p>&ensp;&ensp;&ensp;&ensp;1、在VirtualBox中选择刚刚创建的虚拟系统，点击上方的“Start”，该虚拟系统启动：<br><img src="/2019/10/10/Ubuntu-Install/StartInstall.png" alt="StartInstall"></p>
+<p>&ensp;&ensp;&ensp;&ensp;2、等待系统加载启动镜像，加载过后如下图所示，可在左侧选择安装系统的语言，选择好系统的语言后，点击“Install Ubuntu”：</p>
+<p><img src="/2019/10/10/Ubuntu-Install/InstallUbuntu.png" alt="InstallUbuntu"></p>
+<p>&ensp;&ensp;&ensp;&ensp;3、先不做任何配置，不要勾选任何选项，直接点击“continue”：<br><img src="/2019/10/10/Ubuntu-Install/ContinueInstall.png" alt="ContinueInstall"></p>
+<p>&ensp;&ensp;&ensp;&ensp;4、选择“Erase disk and install Ubuntu”，然后点击“Install Now”，在弹出的对话框中选择“Continue”：<br><img src="/2019/10/10/Ubuntu-Install/EraseInstall.png" alt="EraseInstall"><br><img src="/2019/10/10/Ubuntu-Install/EraseContine.png" alt="EraseContine"></p>
+<p>&ensp;&ensp;&ensp;&ensp;5、选择时区，选择“Shanghai”为东8区，点击“Continue”：<br><img src="/2019/10/10/Ubuntu-Install/TimeZone.png" alt="TimeZone"></p>
+<p>&ensp;&ensp;&ensp;&ensp;6、选择键盘布局，默认点击“Continue”即可，该页面如果看不到“Continue”按钮，可以左右拖动键盘布局的对话框：<br><img src="/2019/10/10/Ubuntu-Install/KeyBoard.png" alt="KeyBoard"></p>
+<p>&ensp;&ensp;&ensp;&ensp;7、配置个人信息，然后点击“Continue”：<br><img src="/2019/10/10/Ubuntu-Install/PersonConfig.png" alt="PersonConfig"></p>
+<p>&ensp;&ensp;&ensp;&ensp;8、系统开始执行安装过程，此过程耗时较长，需要等待一段时间：<br><img src="/2019/10/10/Ubuntu-Install/Installing.png" alt="Installing"></p>
+<p>&ensp;&ensp;&ensp;&ensp;9、安装完成，点击“Restart Now”重启：</p>
+<p><img src="/2019/10/10/Ubuntu-Install/InstallComplete.png" alt="InstallComplete"></p>
+<p>&ensp;&ensp;&ensp;&ensp;10、直接按Enter键即可重启：</p>
+<p><img src="/2019/10/10/Ubuntu-Install/RestartSystem.png" alt="RestartSystem"></p>
+<p>&ensp;&ensp;&ensp;&ensp;11、重启后联网时会提示是否更新最新版本，注意点击不要更新：<br><img src="/2019/10/10/Ubuntu-Install/IgnoreUpdate.png" alt="IgnoreUpdate"></p>
+<h3 id="五、安装拓展增强功能："><a href="#五、安装拓展增强功能：" class="headerlink" title="五、安装拓展增强功能："></a>五、安装拓展增强功能：</h3><p>&ensp;&ensp;&ensp;&ensp;接下来为新安装虚拟系统安装拓展插件，用以实现跨系统的复制粘贴以及全屏等功能。<br>&ensp;&ensp;&ensp;&ensp;1、点击“Device”，选择“Insert Guest Additions CD image”，点击后会在虚拟系统中弹出如下的对话框点击“Run”进行安装：</p>
+<p><img src="/2019/10/10/Ubuntu-Install/InstallAddition.png" alt="InstallAddition"></p>
+<p>&ensp;&ensp;&ensp;&ensp;2、点击“Run”后会弹出一个对话框，输入在安装时设置的密码，然后点击“Authenticate”开始进行安装：<br><img src="/2019/10/10/Ubuntu-Install/RunAddition.png" alt="RunAddition"></p>
+<p>&ensp;&ensp;&ensp;&ensp;3、安装过程中显示进度，当出现如下文字时，点击回车完成安装：<br><img src="/2019/10/10/Ubuntu-Install/AdditionComplete.png" alt="AdditionComplete"></p>
+<h3 id="六、备注"><a href="#六、备注" class="headerlink" title="六、备注"></a>六、备注</h3><p>&ensp;&ensp;&ensp;&ensp;因为不同的系统对应不同的内核,因此如果为了使用某些低版本的内核而安装了较早版本的操作系统,<em style="color:red">联网后会提示是否更新,此时不要进行更新</em>,因为更新会连带一起升级内核,会发送部分软件无法使用的现象.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>孙宏伟</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Ubuntu/"># Ubuntu</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/08/Ubuntu-NVMe/">NVMe硬盘上安装Ubuntu</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 孙宏伟 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
