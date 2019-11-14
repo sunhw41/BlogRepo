@@ -8,6 +8,20 @@ tags:
  - ADB
 ---
 
+&ensp;&ensp;&ensp;&ensp;首先看下官方的介绍:
+
+>&ensp;&ensp;Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:
+&ensp;&ensp; A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.
+&ensp;&ensp;A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.
+&ensp;&ensp;A daemon, which runs as a background process on each emulator or device instance.
+
+>&ensp;&ensp; You can find the adb tool in <sdk>/platform-tools/.
+
+&ensp;&ensp;&ensp;&ensp;大致就是说ADB是个多功能的命令行工具,可以连接到模拟器或者Android设备,由以下三个模块组成:
+&ensp;&ensp;&ensp;&ensp;一个运行在开发机器上的Client,可以通过在shell中输入ADB命令启动一个ADB客户端,ADT插件或者DDMS同样可以启动一个ADB的客户端;
+&ensp;&ensp;&ensp;&ensp;一个运行在开发机器上的Server,以后台的方式运行,用来管理Client和运行在模拟器或者Android设备上的Daemon之间的通信;
+&ensp;&ensp;&ensp;&ensp;一个运行在模拟器或者真实Android设备上的后台程序.
+&ensp;&ensp;&ensp;&ensp;ADB工具一般位于<em style="color:red">  \{sdk\}/platform-tools/.</em>
 ## Android设备连接相关指令
 
 ### 无线调试连接
@@ -33,7 +47,7 @@ $adb  install -t -r ***.apk
 
 ### 删除应用
 ```bash
-$adb  uninstall PackangeName 
+$adb  shell pm uninstall PackangeName 
 ```
 PackangeName为要删除的应用的具体包名;
 ### 查看包名
