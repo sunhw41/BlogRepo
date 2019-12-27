@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>Git忽略不想提交的文件 | 孙宏伟的个人网站.</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">宏伟的Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">宏伟的Blog</a><a id="mobile-toggle-theme">·&nbsp;日间模式</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博文</a>
+                
+                    <a class="menu-item" href="/category">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">前往底部</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "全部折叠"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "展开全部"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Git忽略不想提交的文件</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">孙宏伟</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 26, 2019&nbsp;&nbsp;21:48:35</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Git/">Git</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Git忽略不想提交的文件"><a href="#Git忽略不想提交的文件" class="headerlink" title="Git忽略不想提交的文件"></a>Git忽略不想提交的文件</h2><p>&ensp;&ensp;&ensp;&ensp;在使用Git进行代码管理的时候,由于编译或功能验证需求会产生很多临时文件,这些是不希望上传到远程代码仓库的,但通过<em>git status</em>查看时经常会出现一片红的未追踪文件或修改的文件,对提交工作带来困难,这种情况可以通过配置<strong>“.gitignore”</strong>文件对未提交的文件进行忽略,假设不小心进行了提交,也可以通过<strong>“assume-unchanged”</strong>命令对修改的文件进行忽略,当内容发生变化时不再进行提示.</p>
+<h3 id="“-gitignore”配置文件"><a href="#“-gitignore”配置文件" class="headerlink" title="“.gitignore”配置文件"></a>“.gitignore”配置文件</h3><p>&ensp;&ensp;&ensp;&ensp;在本地新创建几个文件,然后通过<em>git status</em>命令查看,会发现未追踪的文件部分里会列出新增的几个文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sun@sun:~/SUN/GitTest$ touch test001.txt test002.txt test003.txt</span><br><span class="line">sun@sun:~/SUN/GitTest$ git status </span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Initial commit</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line"></span><br><span class="line">	test001.txt</span><br><span class="line">	test002.txt</span><br><span class="line">	test003.txt</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use &quot;git add&quot; to track)</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;如果想对”test001.txt”文件进行忽略,则在相同文件夹内新建一个”.gitignore”文件,在里面添加”test001.txt”,在此执行”git status”会发现未追踪的文件列表内”test001.txt”已经不再显示了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sun@sun:~/SUN/GitTest$ echo test001.txt &gt; .gitignore</span><br><span class="line">sun@sun:~/SUN/GitTest$ git status </span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Initial commit</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line"></span><br><span class="line">	.gitignore</span><br><span class="line">	test002.txt</span><br><span class="line">	test003.txt</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use &quot;git add&quot; to track)</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;同理也可以将文件夹路径填入到该文件,则Git会自动对整个文件夹的内容进行忽略.</p>
+<h3 id="“assume-unchanged”指令"><a href="#“assume-unchanged”指令" class="headerlink" title="“assume-unchanged”指令"></a>“assume-unchanged”指令</h3><p>&ensp;&ensp;&ensp;&ensp;但是有时由于操作不当,不小心将某个临时文件push到了远程仓库,那上述方法就不再好用了,每次编译后修改过的文件列表总会出现该文件,为了避免每次仍然要提交这些不必要文件,”assume-unchanged”这个指令就排上用场了.<br>&ensp;&ensp;&ensp;&ensp;假设”test002.txt”是不小心提交到远程仓库的文件,每次编译都会导致该文件内容改变,出现在修改的文件列表里:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sun@sun:~/SUN/GitTest$ echo aaaa&gt;test002.txt </span><br><span class="line">sun@sun:~/SUN/GitTest$ echo aaaa&gt;test003.txt </span><br><span class="line">sun@sun:~/SUN/GitTest$ git status </span><br><span class="line">On branch master</span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">	modified:   test002.txt</span><br><span class="line">	modified:   test003.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;执行如下命令,默认忽略该文件的修改:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sun@sun:~/SUN/GitTest$ git update-index --assume-unchanged test002.txt</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;再此执行”git status”发现修改过的文件列表中已经没有了”test002.txt”这个文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sun@sun:~/SUN/GitTest$ git status </span><br><span class="line">On branch master</span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">	modified:   test003.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>&ensp;&ensp;&ensp;&ensp;对于本地进行”git add”或者”git commit”命令的文件,可以使用”checkout”或”reset”命令进行护肤,具体方法不在此展开.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>孙宏伟</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Git/"># Git</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/21/adb-command/">ADB常用调试命令</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 孙宏伟 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
